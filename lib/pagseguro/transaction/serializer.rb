@@ -67,20 +67,25 @@ module PagSeguro
       end
 
       def serialize_creditor(data)
-        data[:creditor_fees] = {
-          intermediation_rate_amount: BigDecimal(xml.css("creditorFees > intermediationRateAmount").text),
-          intermediation_fee_amount: BigDecimal(xml.css("creditorFees > intermediationFeeAmount").text),
-          installment_fee_amount: BigDecimal(xml.css("creditorFees > installmentFeeAmount").text),
-        }
+        data[:creditor_fees] = {}
 
-        operationalFeeAmount = xml.css("creditorFees > operationalFeeAmount").text
-        data[:creditor_fees].merge!(operational_fee_amount: BigDecimal(operationalFeeAmount)) if operationalFeeAmount.present?
+        intermediation_rate_amount = xml.css("creditorFees > intermediationRateAmount").text
+        data[:creditor_fees].merge!(intermediation_rate_amount: BigDecimal(intermediation_rate_amount)) unless intermediation_rate_amount.nil? || intermediation_rate_amount.empty?
 
-        commissionFeeAmount = xml.css("creditorFees > commissionFeeAmount").text
-        data[:creditor_fees].merge!(commission_fee_amount: BigDecimal(commissionFeeAmount)) if commissionFeeAmount.present?
+        intermediation_fee_amount = xml.css("creditorFees > intermediationFeeAmount").text
+        data[:creditor_fees].merge!(intermediation_fee_amount: BigDecimal(intermediation_fee_amount)) unless intermediation_fee_amount.nil? || intermediation_fee_amount.empty?
+
+        installment_fee_amount = xml.css("creditorFees > installmentFeeAmount").text
+        data[:creditor_fees].merge!(installment_fee_amount: BigDecimal(installment_fee_amount)) unless installment_fee_amount.nil? || installment_fee_amount.empty?
+
+        operational_fee_amount = xml.css("creditorFees > operationalFeeAmount").text
+        data[:creditor_fees].merge!(operational_fee_amount: BigDecimal(operational_fee_amount)) unless operational_fee_amount.nil? || operational_fee_amount.empty?
+
+        commission_fee_amount = xml.css("creditorFees > commissionFeeAmount").text
+        data[:creditor_fees].merge!(commission_fee_amount: BigDecimal(commission_fee_amount)) unless commission_fee_amount.nil? || commission_fee_amount.empty?
 
         efrete = xml.css("creditorFees > efrete").text
-        data[:creditor_fees].merge!(efrete: BigDecimal(efrete)) if efrete.present?
+        data[:creditor_fees].merge!(efrete: BigDecimal(efrete)) unless efrete.nil? || efrete.empty?
       end
 
       def serialize_payments(data)
