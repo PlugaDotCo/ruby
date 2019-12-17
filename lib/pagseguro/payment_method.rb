@@ -10,7 +10,8 @@ module PagSeguro
       "3" => :online_transfer,
       "4" => :balance,
       "5" => :oi_paggo,
-      "7" => :direct_deposit
+      "7" => :direct_deposit,
+      "8" => :instant_payment # Not official
     }.freeze
 
     # The payment method code.
